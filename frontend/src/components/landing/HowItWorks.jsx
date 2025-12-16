@@ -1,93 +1,109 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { ArrowRight } from 'lucide-react';
-import { Button } from '../ui/button';
 import { howItWorksData } from '../../data/mock';
 
 export const HowItWorks = () => {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const containerRef = useRef(null);
+  const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start end', 'end start']
+  });
+
+  const lineWidth = useTransform(scrollYProgress, [0.2, 0.8], ['0%', '100%']);
 
   return (
-    <section className="relative py-24" id="how-it-works">
-      <div className="max-w-7xl mx-auto px-6" ref={ref}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--text-primary)]">
-            {howItWorksData.sectionTitle}
-          </h2>
-        </motion.div>
+    <section ref={containerRef} className="relative py-32 md:py-48" id="process">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-12" ref={ref}>
+        {/* Header */}
+        <div className="max-w-3xl mb-24">
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+            className="text-[var(--accent-primary)] text-sm font-medium tracking-[0.3em] uppercase mb-6 block"
+          >
+            The Process
+          </motion.span>
 
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.2 }}
+            className="text-4xl md:text-6xl lg:text-7xl font-bold"
+          >
+            From chaos to
+            <br />
+            <span className="hero-title-fill">autopilot</span>
+          </motion.h2>
+        </div>
+
+        {/* Steps */}
         <div className="relative">
-          {/* Connection line */}
-          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[var(--border-primary)] to-transparent -translate-y-1/2" />
-          
-          <div className="grid lg:grid-cols-3 gap-8">
+          {/* Progress line */}
+          <div className="hidden lg:block absolute top-24 left-0 right-0 h-px bg-[var(--border-primary)]">
+            <motion.div 
+              style={{ width: lineWidth }}
+              className="h-full bg-[var(--accent-primary)]"
+            />
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-12 lg:gap-8">
             {howItWorksData.steps.map((step, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 50 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: i * 0.2, duration: 0.5 }}
+                transition={{ delay: 0.3 + i * 0.2, duration: 0.6 }}
                 className="relative"
               >
-                <div className="relative bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-2xl p-8 h-full">
-                  {/* Step number */}
-                  <div className="absolute -top-4 left-8 bg-[var(--accent-primary)] text-[var(--bg-primary)] font-bold text-lg px-4 py-1 rounded-full">
-                    {step.number}
-                  </div>
-                  
-                  <div className="pt-4">
-                    <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-4">
-                      {step.title}
-                    </h3>
-                    
-                    <p className="text-[var(--text-muted)] mb-6 leading-relaxed">
-                      {step.description}
-                    </p>
-                    
-                    <div className="flex items-center gap-4 text-sm">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[var(--text-muted)]">Duration:</span>
-                        <span className="text-[var(--text-secondary)] font-medium">{step.duration}</span>
-                      </div>
-                      <div className="w-px h-4 bg-[var(--border-primary)]" />
-                      <div className="flex items-center gap-2">
-                        <span className="text-[var(--text-muted)]">Cost:</span>
-                        <span className="text-[var(--accent-primary)] font-medium">{step.cost}</span>
-                      </div>
-                    </div>
+                {/* Step number */}
+                <div className="relative z-10 mb-8">
+                  <div className="w-12 h-12 rounded-full bg-[var(--accent-primary)] flex items-center justify-center">
+                    <span className="text-[var(--bg-primary)] font-bold text-lg">{step.number}</span>
                   </div>
                 </div>
+
+                <div className="counter-number mb-4 opacity-30">{step.number}</div>
                 
-                {/* Arrow connector */}
-                {i < howItWorksData.steps.length - 1 && (
-                  <div className="hidden lg:flex absolute top-1/2 -right-4 -translate-y-1/2 z-10">
-                    <ArrowRight className="w-8 h-8 text-[var(--accent-primary)]" />
+                <h3 className="text-2xl md:text-3xl font-bold mb-4">{step.title}</h3>
+                
+                <p className="text-[var(--text-muted)] mb-6 leading-relaxed">
+                  {step.description}
+                </p>
+
+                <div className="flex items-center gap-6 text-sm">
+                  <div>
+                    <span className="text-[var(--text-muted)] block">Duration</span>
+                    <span className="font-medium">{step.duration}</span>
                   </div>
-                )}
+                  <div className="w-px h-8 bg-[var(--border-primary)]" />
+                  <div>
+                    <span className="text-[var(--text-muted)] block">Cost</span>
+                    <span className="font-medium text-[var(--accent-primary)]">{step.cost}</span>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
 
+        {/* CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.6, duration: 0.5 }}
-          className="text-center mt-12"
+          transition={{ delay: 1 }}
+          className="text-center mt-24"
         >
-          <Button
-            size="lg"
-            className="bg-[var(--accent-primary)] text-[var(--bg-primary)] hover:bg-[var(--accent-hover)] font-semibold px-8 py-6 rounded-xl text-lg btn-shine group"
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            className="btn-primary-large"
           >
-            Get Your Free Automation Audit
-            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </Button>
+            Start Your Automation Journey
+            <ArrowRight className="w-5 h-5" />
+          </motion.button>
         </motion.div>
       </div>
     </section>

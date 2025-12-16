@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { ArrowRight, Briefcase, Home, DollarSign, Stethoscope, Scale, Calculator, Wrench, ShoppingBag } from 'lucide-react';
-import { Button } from '../ui/button';
 import { industriesData } from '../../data/mock';
 
 const iconMap = {
@@ -17,111 +16,102 @@ const iconMap = {
 };
 
 export const Industries = () => {
-  const [activeTab, setActiveTab] = useState('coaches');
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const containerRef = useRef(null);
+  const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
 
-  const activeIndustry = industriesData.industries.find(ind => ind.id === activeTab);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end']
+  });
+
+  const x = useTransform(scrollYProgress, [0, 1], ['0%', '-60%']);
 
   return (
-    <section className="relative py-24" id="industries">
-      <div className="max-w-7xl mx-auto px-6" ref={ref}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-12"
-        >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--text-primary)]">
-            {industriesData.sectionTitle}
-          </h2>
-        </motion.div>
-
-        {/* Tab Navigation */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.2, duration: 0.5 }}
-          className="flex flex-wrap justify-center gap-3 mb-12"
-        >
-          {industriesData.industries.map((industry) => {
-            const Icon = iconMap[industry.id];
-            return (
-              <button
-                key={industry.id}
-                onClick={() => setActiveTab(industry.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all ${
-                  activeTab === industry.id
-                    ? 'bg-[var(--accent-bg)] border-[var(--accent-primary)] text-[var(--accent-primary)]'
-                    : 'bg-[var(--bg-secondary)] border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--border-primary)] hover:text-[var(--text-secondary)]'
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-                <span className="text-sm font-medium hidden sm:inline">{industry.name}</span>
-              </button>
-            );
-          })}
-        </motion.div>
-
-        {/* Active Industry Content */}
-        <AnimatePresence mode="wait">
-          {activeIndustry && (
-            <motion.div
-              key={activeTab}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className="bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-2xl p-8"
+    <section ref={containerRef} className="horizontal-section" id="industries">
+      <div className="horizontal-container">
+        <div className="w-full" ref={ref}>
+          {/* Header - fixed on left */}
+          <div className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 max-w-md z-10">
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : {}}
+              className="text-[var(--accent-primary)] text-sm font-medium tracking-[0.3em] uppercase mb-6 block"
             >
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-2">
-                  {activeIndustry.name}
-                </h3>
-                <p className="text-[var(--accent-primary)] font-medium">
-                  {activeIndustry.tagline}
-                </p>
-              </div>
+              Industries
+            </motion.span>
 
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {activeIndustry.automations.map((automation, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: i * 0.05 }}
-                    className="bg-[var(--bg-tertiary)] rounded-xl p-5 border border-transparent hover:border-[var(--border-primary)] transition-colors"
-                  >
-                    <h4 className="text-[var(--text-primary)] font-semibold mb-2">
-                      {automation.name}
-                    </h4>
-                    <p className="text-sm text-[var(--text-muted)] leading-relaxed">
-                      {automation.description}
-                    </p>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              className="text-3xl md:text-5xl font-bold mb-6"
+            >
+              Automations that
+              <span className="hero-title-fill"> move the needle</span>
+            </motion.h2>
 
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.5, duration: 0.5 }}
-          className="text-center mt-12"
-        >
-          <p className="text-[var(--text-secondary)] mb-6">
-            {industriesData.bottomCTA}
-          </p>
-          <Button
-            size="lg"
-            className="bg-[var(--accent-primary)] text-[var(--bg-primary)] hover:bg-[var(--accent-hover)] font-semibold px-8 py-6 rounded-xl text-lg btn-shine group"
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : {}}
+              transition={{ delay: 0.3 }}
+              className="text-[var(--text-muted)] hidden md:block"
+            >
+              Scroll to explore industry-specific solutions
+            </motion.p>
+          </div>
+
+          {/* Horizontal scrolling cards */}
+          <motion.div 
+            style={{ x }}
+            className="horizontal-track pl-[50vw]"
           >
-            Book Free Automation Audit
-            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </Button>
-        </motion.div>
+            {industriesData.industries.map((industry, i) => {
+              const Icon = iconMap[industry.id];
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={inView ? { opacity: 1, scale: 1 } : {}}
+                  transition={{ delay: 0.2 + i * 0.1 }}
+                  className="industry-card"
+                >
+                  <span className="industry-card-number">0{i + 1}</span>
+                  
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 rounded-2xl bg-[var(--accent-bg)] flex items-center justify-center">
+                      <Icon className="w-6 h-6 text-[var(--accent-primary)]" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg">{industry.name}</h3>
+                      <p className="text-sm text-[var(--accent-primary)]">{industry.tagline}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex-1 space-y-3 overflow-hidden">
+                    {industry.automations.slice(0, 4).map((automation, j) => (
+                      <div
+                        key={j}
+                        className="p-4 rounded-xl bg-white/[0.03] border border-white/5 hover:border-[var(--accent-primary)]/30 transition-colors"
+                      >
+                        <h4 className="font-medium text-sm mb-1">{automation.name}</h4>
+                        <p className="text-xs text-[var(--text-muted)] line-clamp-2">
+                          {automation.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <motion.button
+                    whileHover={{ x: 5 }}
+                    className="mt-6 flex items-center gap-2 text-sm text-[var(--accent-primary)] font-medium"
+                  >
+                    Explore {industry.name}
+                    <ArrowRight className="w-4 h-4" />
+                  </motion.button>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        </div>
       </div>
     </section>
   );
