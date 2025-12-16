@@ -1,34 +1,151 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* App specific styles */
+
+/* Grid patterns for backgrounds */
+.grid-pattern {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+/* Radial gradient overlay */
+.radial-gradient-overlay {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(218, 255, 1, 0.15), transparent);
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+/* Workflow node styles */
+.workflow-node {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  padding: 12px 16px;
+  transition: all 0.3s ease;
 }
 
-.App-link {
-    color: #61dafb;
+.workflow-node:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 20px rgba(218, 255, 1, 0.2);
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+.workflow-connector {
+  stroke: var(--border-primary);
+  stroke-width: 2;
+  fill: none;
+}
+
+.workflow-connector-animated {
+  stroke-dasharray: 5, 5;
+  animation: dash 1s linear infinite;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -10;
+  }
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Button shine effect */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-shine:hover::before {
+  left: 100%;
+}
+
+/* Tab active indicator */
+.tab-indicator {
+  position: absolute;
+  bottom: 0;
+  height: 2px;
+  background: var(--accent-primary);
+  transition: all 0.3s ease;
+}
+
+/* Pricing card popular badge glow */
+.popular-glow {
+  box-shadow: 0 0 30px rgba(218, 255, 1, 0.2);
+}
+
+/* FAQ accordion transition */
+.faq-content {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+/* Testimonial card */
+.testimonial-card {
+  position: relative;
+}
+
+.testimonial-card::before {
+  content: '"';
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  font-size: 80px;
+  color: var(--accent-primary);
+  opacity: 0.2;
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+
+/* Section dividers */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-primary), transparent);
+  margin: 80px 0;
+}
+
+/* Industry tab active state */
+.industry-tab-active {
+  background: var(--accent-bg);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+/* Ecosystem card connections */
+.ecosystem-connector {
+  position: absolute;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--border-primary), var(--accent-primary));
+  top: 50%;
+  right: -40px;
+}
+
+/* Mobile menu */
+@media (max-width: 768px) {
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-primary);
+    z-index: 100;
+    padding: 24px;
+  }
 }
