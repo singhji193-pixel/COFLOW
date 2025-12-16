@@ -8,14 +8,15 @@ export function initLenis() {
   if (lenisInstance) return lenisInstance;
 
   lenisInstance = new Lenis({
-    duration: 1.2,
+    duration: 1.5,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     orientation: 'vertical',
     gestureOrientation: 'vertical',
     smoothWheel: true,
-    wheelMultiplier: 1,
-    touchMultiplier: 2,
+    wheelMultiplier: 0.8,
+    touchMultiplier: 1.5,
     infinite: false,
+    lerp: 0.1,
   });
 
   function raf(time) {
@@ -36,7 +37,7 @@ export function scrollTo(target, options = {}) {
   if (lenisInstance) {
     lenisInstance.scrollTo(target, {
       offset: 0,
-      duration: 1.2,
+      duration: 2,
       ...options
     });
   }
