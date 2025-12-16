@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
-import { Button } from '../ui/button';
+import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { scrollTo } from '../../lib/lenis';
 
 const navLinks = [
-  { name: 'How It Works', href: '#how-it-works' },
+  { name: 'Process', href: '#process' },
   { name: 'Industries', href: '#industries' },
   { name: 'Pricing', href: '#pricing' },
-  { name: 'FAQ', href: '#faq' },
 ];
 
 export const Header = () => {
@@ -16,9 +14,7 @@ export const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 100);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -32,83 +28,92 @@ export const Header = () => {
   return (
     <>
       <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? 'glass' : 'bg-transparent'
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
+          isScrolled ? 'glass py-4' : 'bg-transparent py-6'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="max-w-[1800px] mx-auto px-6 md:px-12">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <a href="/" className="flex items-center gap-2 group">
-              <div className="w-10 h-10 rounded-xl bg-[var(--accent-primary)] flex items-center justify-center">
-                <span className="text-[var(--bg-primary)] font-bold text-lg">CF</span>
-              </div>
-              <span className="text-xl font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] transition-colors">
-                COFlow
-              </span>
+            <a href="/" className="group flex items-center gap-3">
+              <motion.div 
+                whileHover={{ rotate: 180 }}
+                transition={{ duration: 0.6 }}
+                className="w-12 h-12 rounded-2xl bg-[var(--accent-primary)] flex items-center justify-center"
+              >
+                <span className="text-[var(--bg-primary)] font-black text-xl">C</span>
+              </motion.div>
+              <span className="text-2xl font-bold tracking-tight hidden sm:block">COFlow</span>
             </a>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-8">
+            {/* Desktop Nav */}
+            <nav className="hidden md:flex items-center gap-12">
               {navLinks.map((link) => (
-                <a
+                <motion.a
                   key={link.name}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className="text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors font-medium"
+                  className="relative text-[var(--text-secondary)] hover:text-white transition-colors font-medium text-sm tracking-wide uppercase"
+                  whileHover="hover"
                 >
                   {link.name}
-                </a>
+                  <motion.span
+                    className="absolute -bottom-1 left-0 h-px bg-[var(--accent-primary)]"
+                    initial={{ width: 0 }}
+                    variants={{ hover: { width: '100%' } }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </motion.a>
               ))}
             </nav>
 
-            {/* CTA Button */}
-            <div className="hidden md:block">
-              <Button
-                className="bg-[var(--accent-primary)] text-[var(--bg-primary)] hover:bg-[var(--accent-hover)] font-semibold px-6 py-2 rounded-xl btn-shine"
-              >
-                Book Free Audit
-              </Button>
-            </div>
+            {/* CTA */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="hidden md:flex items-center gap-2 bg-white text-black font-semibold px-6 py-3 rounded-full text-sm"
+            >
+              Book Audit
+              <ArrowUpRight className="w-4 h-4" />
+            </motion.button>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu */}
             <button
-              className="md:hidden p-2 text-[var(--text-primary)]"
+              className="md:hidden p-2"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
           </div>
         </div>
       </motion.header>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-40 bg-[var(--bg-primary)] pt-24 px-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-[var(--bg-primary)] flex flex-col items-center justify-center"
           >
-            <nav className="flex flex-col gap-6">
-              {navLinks.map((link) => (
-                <a
+            <nav className="flex flex-col items-center gap-8">
+              {navLinks.map((link, i) => (
+                <motion.a
                   key={link.name}
                   href={link.href}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className="text-2xl text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors font-medium"
+                  className="text-4xl font-bold"
                 >
                   {link.name}
-                </a>
+                </motion.a>
               ))}
-              <Button
-                className="mt-6 bg-[var(--accent-primary)] text-[var(--bg-primary)] hover:bg-[var(--accent-hover)] font-semibold px-6 py-4 rounded-xl w-full"
-              >
-                Book Free Audit
-              </Button>
             </nav>
           </motion.div>
         )}
