@@ -1,0 +1,12 @@
+export { Header } from './Header';
+export { Hero } from './Hero';
+export { Problems } from './Problems';
+export { Solution } from './Solution';
+export { HowItWorks } from './HowItWorks';
+export { Industries } from './Industries';
+export { Ecosystem } from './Ecosystem';
+export { Pricing } from './Pricing';
+export { Testimonials } from './Testimonials';
+export { FAQ } from './FAQ';
+export { FinalCTA } from './FinalCTA';
+export { Footer } from './Footer';
