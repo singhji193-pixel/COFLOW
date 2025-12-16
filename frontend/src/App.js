@@ -1,20 +1,23 @@
 import { useEffect } from 'react';
 import './App.css';
 import { initLenis } from './lib/lenis';
+import '@fontsource/inter/300.css';
 import '@fontsource/inter/400.css';
 import '@fontsource/inter/500.css';
 import '@fontsource/inter/600.css';
 import '@fontsource/inter/700.css';
+import '@fontsource/inter/800.css';
 import '@fontsource/inter/900.css';
 
 import {
   Header,
   Hero,
+  Marquee,
   Problems,
   Solution,
   HowItWorks,
   Industries,
-  Ecosystem,
+  Stats,
   Pricing,
   Testimonials,
   FAQ,
@@ -24,28 +27,23 @@ import {
 
 function App() {
   useEffect(() => {
-    // Initialize Lenis smooth scrolling
     const lenis = initLenis();
-    
-    return () => {
-      if (lenis) {
-        lenis.destroy();
-      }
-    };
+    return () => lenis?.destroy();
   }, []);
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)]">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-white noise">
       <Header />
       <main>
         <Hero />
+        <Marquee />
         <Problems />
         <Solution />
+        <Stats />
         <HowItWorks />
         <Industries />
-        <Ecosystem />
-        <Pricing />
         <Testimonials />
+        <Pricing />
         <FAQ />
         <FinalCTA />
       </main>

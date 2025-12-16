@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Linkedin, Twitter, Youtube, MapPin, Flag } from 'lucide-react';
+import { Linkedin, Twitter, Youtube, MapPin } from 'lucide-react';
 import { footerData } from '../../data/mock';
 
 const iconMap = {
@@ -11,42 +11,37 @@ const iconMap = {
 
 export const Footer = () => {
   return (
-    <footer className="relative bg-[var(--bg-secondary)] border-t border-[var(--border-subtle)]">
-      <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-          {/* Brand Column */}
-          <div className="lg:col-span-1">
-            <a href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-[var(--accent-primary)] flex items-center justify-center">
-                <span className="text-[var(--bg-primary)] font-bold text-lg">CF</span>
+    <footer className="footer-immersive py-20">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-12">
+        {/* Top section */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
+          {/* Brand */}
+          <div className="lg:col-span-2">
+            <a href="/" className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 rounded-2xl bg-[var(--accent-primary)] flex items-center justify-center">
+                <span className="text-[var(--bg-primary)] font-black text-xl">C</span>
               </div>
-              <span className="text-xl font-bold text-[var(--text-primary)]">
-                {footerData.brand.name}
-              </span>
+              <span className="text-2xl font-bold">COFlow</span>
             </a>
-            <p className="text-[var(--text-muted)] mb-4 text-sm leading-relaxed">
-              {footerData.brand.description}
+            <p className="text-[var(--text-muted)] mb-6 max-w-sm leading-relaxed">
+              Custom AI automation for North American businesses. 
+              We build the workflows that make your business run itself.
             </p>
-            <div className="flex items-center gap-2 text-sm text-[var(--text-muted)] mb-2">
+            <div className="flex items-center gap-2 text-sm text-[var(--text-muted)] mb-4">
               <MapPin className="w-4 h-4" />
-              {footerData.brand.location}
+              Vancouver, BC, Canada
             </div>
-            <p className="text-sm text-[var(--text-muted)]">
-              {footerData.brand.serving}
-            </p>
-            
-            {/* Social Links */}
-            <div className="flex gap-3 mt-6">
+
+            {/* Social */}
+            <div className="flex gap-3">
               {footerData.social.map((social, i) => {
                 const Icon = iconMap[social.icon];
                 return (
                   <motion.a
                     key={i}
                     href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.1 }}
-                    className="w-10 h-10 rounded-lg bg-[var(--bg-tertiary)] flex items-center justify-center text-[var(--text-muted)] hover:bg-[var(--accent-primary)] hover:text-[var(--bg-primary)] transition-colors"
+                    whileHover={{ scale: 1.1, y: -2 }}
+                    className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[var(--text-muted)] hover:bg-[var(--accent-primary)] hover:text-[var(--bg-primary)] transition-colors"
                   >
                     <Icon className="w-5 h-5" />
                   </motion.a>
@@ -55,39 +50,36 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Ecosystem Column */}
+          {/* Ecosystem */}
           <div>
-            <h4 className="text-[var(--text-primary)] font-semibold mb-4">Ecosystem</h4>
-            <ul className="space-y-3">
+            <h4 className="font-semibold mb-6 text-sm tracking-wider uppercase">Ecosystem</h4>
+            <ul className="space-y-4">
               {footerData.ecosystem.map((link, i) => (
                 <li key={i}>
                   <a
                     href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className={`text-sm transition-colors ${
                       link.current
-                        ? 'text-[var(--accent-primary)] font-medium'
-                        : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
+                        ? 'text-[var(--accent-primary)]'
+                        : 'text-[var(--text-muted)] hover:text-white'
                     }`}
                   >
                     {link.name}
-                    {link.current && <span className="ml-2 text-xs">(current)</span>}
                   </a>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Resources Column */}
+          {/* Resources */}
           <div>
-            <h4 className="text-[var(--text-primary)] font-semibold mb-4">Resources</h4>
-            <ul className="space-y-3">
+            <h4 className="font-semibold mb-6 text-sm tracking-wider uppercase">Resources</h4>
+            <ul className="space-y-4">
               {footerData.resources.map((link, i) => (
                 <li key={i}>
                   <a
                     href={link.url}
-                    className="text-sm text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
+                    className="text-sm text-[var(--text-muted)] hover:text-white transition-colors"
                   >
                     {link.name}
                   </a>
@@ -96,15 +88,15 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Legal Column */}
+          {/* Legal */}
           <div>
-            <h4 className="text-[var(--text-primary)] font-semibold mb-4">Legal</h4>
-            <ul className="space-y-3">
+            <h4 className="font-semibold mb-6 text-sm tracking-wider uppercase">Legal</h4>
+            <ul className="space-y-4">
               {footerData.legal.map((link, i) => (
                 <li key={i}>
                   <a
                     href={link.url}
-                    className="text-sm text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
+                    className="text-sm text-[var(--text-muted)] hover:text-white transition-colors"
                   >
                     {link.name}
                   </a>
@@ -114,17 +106,16 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-[var(--border-subtle)]">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-[var(--text-muted)]">
-              {footerData.copyright}
-            </p>
-            <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
-              <Flag className="w-4 h-4 text-red-500" />
-              {footerData.tagline}
-            </div>
-          </div>
+        {/* Divider */}
+        <div className="h-px bg-gradient-to-r from-transparent via-[var(--border-primary)] to-transparent mb-8" />
+
+        {/* Bottom */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-[var(--text-muted)]">
+          <p>© 2025 COEngine Service Inc. All rights reserved.</p>
+          <p className="flex items-center gap-2">
+            <span className="text-red-500">🍁</span>
+            Proudly Canadian
+          </p>
         </div>
       </div>
     </footer>
